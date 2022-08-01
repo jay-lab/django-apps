@@ -9,9 +9,7 @@ topics = [
     {'id':3, 'title':'Model', 'body':'Model is ..'},
 ]
 
-def index(request):
-    # return HttpResponse('Welcome!')
-    # return HttpResponse('<h1>Random</h1>' + str(random.random()))
+def HTMLTemplate(articleTag):
     global topics
     ol = ''
     for topic in topics:
@@ -19,18 +17,31 @@ def index(request):
     return HttpResponse(f'''
     <html>
     <body>
-        <h1>Django</h1>
-        <ol>
+        <h1><a href='/'>Django</h1>
+        <ul>
             {ol}
-        </ol>
-        <h2>Welcome</h2>
-        Hello, Django
+        </ul>
+        {articleTag}
     </body>
     </html>
     ''')
+
+def index(request):
+    # return HttpResponse('Welcome!')
+    # return HttpResponse('<h1>Random</h1>' + str(random.random()))
+    article = '''
+    <h2>Welcome</h2>
+    Hello, Django
+    '''
+    return HttpResponse(HTMLTemplate(article))
 
 def create(request):
     return HttpResponse('create!')
 
 def read(request, id):
-    return HttpResponse('read!' + id)
+    global topics
+    article = ''
+    for topic in topics:
+        if topic['id'] == int(id):
+            article = f'<h2>{topic["title"]}</h2>{topic["body"]}'
+    return HttpResponse(HTMLTemplate(article))
